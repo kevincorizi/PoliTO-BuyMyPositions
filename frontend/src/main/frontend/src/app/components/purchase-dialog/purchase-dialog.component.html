@@ -1,0 +1,60 @@
+<div *ngIf="!loading && !done && !error">
+    <!-- Initial state -->
+    <h2 mat-dialog-title>{{title}}</h2>
+    <mat-dialog-content class="d-block pb-3">
+        <p>{{description}}</p>
+        <mat-expansion-panel *ngFor="let archive of archives">
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{archive.realArchiveId}}</mat-panel-title>
+                <mat-panel-description><span>Positions: {{archive.realPositions}}</span></mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list>
+                <mat-list-item *ngFor="let position of archive.approxPositionArchive.geoPoints; let last = last;">
+                    <span class="mr-2">Approximate latitude: <span>{{ position.geoPoint.y }}</span>,</span>
+                    <span>Approximate longitude: <span>{{ position.geoPoint.x }}</span></span>
+                    <mat-divider *ngIf="!last"></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button class="mat-button mat-primary" (click)="purchase()">Purchase</button>
+        <button mat-button class="mat-button mat-primary" (click)="close()">Cancel</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="loading">
+    <!-- While performing the transaction -->
+    <h2 mat-dialog-title>Transaction in progress...</h2>
+    <mat-dialog-content>
+        <mat-progress-spinner
+                class="d-block mx-auto p-5"
+                color="primary"
+                mode="indeterminate">
+        </mat-progress-spinner>
+    </mat-dialog-content>
+</div>
+
+<div *ngIf="done && !error">
+    <!-- After a successful request -->
+    <h2 mat-dialog-title>{{doneTitle}}</h2>
+    <mat-dialog-content>
+        <p>{{doneDescription}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button class="mat-button mat-primary" (click)="downloadPurchase()">Download archives</button>
+        <button mat-button class="mat-button mat-primary" (click)="close()">Close</button>
+    </mat-dialog-actions>
+</div>
+
+<div *ngIf="error">
+    <!-- In case of error -->
+    <h2 mat-dialog-title>Oh no...</h2>
+    <mat-dialog-content>
+        <p>An error occurred during the transaction.</p>
+        <p>Please contact the support: the error code is {{errorCode}}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button class="mat-button mat-primary" (click)="close()">Close</button>
+    </mat-dialog-actions>
+</div>

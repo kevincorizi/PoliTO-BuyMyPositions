@@ -1,0 +1,13 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  display: flex;
+  align-items: center;
+}
+
+.mat-expansion-panel-header-title .mat-checkbox label {
+  margin-bottom: 0 !important;
+  margin-right: 8px;
+}

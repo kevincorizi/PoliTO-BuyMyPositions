@@ -1,0 +1,37 @@
+# Internet Applications Goup2 - LAB2
+# This dockerfile builds a docker image of PostgrSQL with the extension PostGis
+# The image already exposes port 5432
+
+FROM kartoza/postgis:9.6-2.4
+
+LABEL it.polito.ai.group2.maintainer="invalid_email@polito.it"
+LABEL it.polito.ai.group2.version="0.1"
+LABEL it.polito.ai.description="Postgress Image with PostGis extension for AI 2018 class - LAB2"
+
+# Here we are :
+# Configuring name of a login role in PostgreSQL that will have superuser (admin) priviliges in the DB.
+# Setting the password for that user
+# Telling the container to create a new PostgreSQL db instance with postgis extension named gis_db_instance
+
+ENV POSTGRES_USER group2
+ENV POSTGRES_PASSWORD group2
+
+# Is also possible to create an additional DB using:
+ENV POSTGRES_DB usersdb
+
+# Configuring PostgreSQL to accept connections from anyone.
+# By default it would accept only connections coming from addresses using Docker networking subnet
+
+ENV ALLOW_IP_RANGE 0.0.0.0/0
+
+# By default the DB is destroyed at every restart
+
+ENV DESTROY_DATABASE_ON_RESTART False
+
+# By default the content of the /docker-entrypoint-init.d is executed by the docker-entrypoint.sh
+# This is used as an embedded mechanism to add scripts and sql commands to the db startup.
+# Thus we copy our scripts to this particular folder of the image
+# Currently commented, we are going to exploit volumes backup to restore dbs
+
+# ++ NB UNCOMMENT this line if you do not have any dump of users_db ++
+ADD docker-entrypoint-initdb.d /docker-entrypoint-initdb.d/

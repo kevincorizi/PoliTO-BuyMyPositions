@@ -1,0 +1,17 @@
+# Internet Applications Group2 - LAB3
+# This dockerfile builds a docker image of MongoDB
+# The image already exposes port 5432
+
+FROM mongo:latest
+
+LABEL it.polito.ai.group2.maintainer="invalid_email@polito.it"
+LABEL it.polito.ai.group2.version="0.1"
+LABEL it.polito.ai.description="MongoDB Image for AI 2018 class - LAB3"
+
+#ENV MONGO_INITDB_ROOT_USERNAME group2
+#ENV MONGO_INITDB_ROOT_PASSWORD group2
+ENV MONGO_INITDB_DATABASE polito_ai_lab3
+
+# Uncomment if you want to add custom initialization scripts to the image
+# Scripts have to be placed in docker-entrypoint-initdb.d and will be executed at container startup
+# ADD docker-entrypoint-initdb.d /docker-entrypoint-initdb.d/

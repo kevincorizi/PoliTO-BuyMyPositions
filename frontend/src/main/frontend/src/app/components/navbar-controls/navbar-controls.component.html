@@ -1,0 +1,95 @@
+<mat-toolbar [ngClass]="class">
+    <div class="row container mx-auto">
+        <span><a class="logo navbar-brand" routerLink="/">{{title}}</a></span>
+        <span style="flex: 1 1 auto;"></span>
+        <div *ngIf="!authService.isLogged() && !isLoginPage" fxLayout="row" fxShow="false" fxShow.gt-sm>
+            <button mat-button routerLink="/login" class="bmp-profile-menu">
+                <mat-icon>lock_open</mat-icon>
+                <span>Login</span>
+            </button>
+        </div>
+        <div *ngIf="authService.isLogged() && isUserPage" fxLayout="row" fxShow="false" fxShow.gt-sm>
+            <button mat-button routerLink="/user/view">Archives</button>
+            <button mat-button routerLink="/user/upload">Upload</button>
+            <button mat-button routerLink="/user/purchases">Transactions</button>
+            <button mat-button routerLink="/user/purchase">Purchase</button>
+            <button mat-button [matMenuTriggerFor]="profileMenu" class="bmp-profile-menu">
+                <mat-icon>account_circle</mat-icon>
+                <span>{{authService.getLoggedUsername()}}</span>
+            </button>
+            <mat-menu #profileMenu="matMenu" [overlapTrigger]="false" [ngClass]="bmp-profile-menu-body">
+                <div mat-menu-item>
+                    <mat-icon>attach_money</mat-icon>
+                    <span>Balance: {{authService.getBalance()}}</span>
+                </div>
+                <button mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Logout</span>
+                </button>
+            </mat-menu>
+        </div>
+        <div *ngIf="authService.isLogged() && !isUserPage" fxLayout="row" fxShow="false" fxShow.gt-sm>
+            <button mat-button [matMenuTriggerFor]="profileMenu" class="bmp-profile-menu">
+                <mat-icon>account_circle</mat-icon>
+                <span>{{authService.getLoggedUsername()}}</span>
+            </button>
+            <mat-menu #profileMenu="matMenu" [overlapTrigger]="false" [ngClass]="bmp-profile-menu-body">
+                <button mat-menu-item routerLink="/user">
+                    <mat-icon>account_box</mat-icon>
+                    <span>Your profile</span>
+                </button>
+                <div mat-menu-item (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Logout</span>
+                </div>
+            </mat-menu>
+        </div>
+        <button *ngIf="!isLoginPage" mat-button [mat-menu-trigger-for]="menu" fxHide="false" fxHide.gt-sm>
+            <mat-icon>menu</mat-icon>
+        </button>
+    </div>
+</mat-toolbar>
+<mat-menu x-position="before" [overlapTrigger]="false" #menu="matMenu">
+    <ng-container *ngIf="!authService.isLogged() && !isLoginPage">
+        <button mat-menu-item routerLink="/login">
+            <mat-icon>lock_open</mat-icon>
+            <span>Login</span>
+        </button>
+    </ng-container>
+    <ng-container *ngIf="authService.isLogged() && isUserPage">
+        <button mat-menu-item routerLink="/user/view">
+            <mat-icon>list</mat-icon>
+            <span>Archives</span>
+        </button>
+        <button mat-menu-item routerLink="/user/upload">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>Upload</span>
+        </button>
+        <button mat-menu-item routerLink="/user/purchases">
+            <mat-icon>assignment_turned_in</mat-icon>
+            <span>Transactions</span>
+        </button>
+        <button mat-menu-item routerLink="/user/purchase">
+            <mat-icon>shopping_cart</mat-icon>
+            <span>Purchase</span>
+        </button>
+        <div mat-menu-item>
+            <mat-icon>attach_money</mat-icon>
+            <span>Balance: {{authService.getBalance()}}</span>
+        </div>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+        </button>
+    </ng-container>
+    <ng-container *ngIf="authService.isLogged() && !isUserPage">
+        <button mat-menu-item routerLink="/user">
+            <mat-icon>account_box</mat-icon>
+            <span>Your profile</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Logout</span>
+        </button>
+    </ng-container>
+</mat-menu>

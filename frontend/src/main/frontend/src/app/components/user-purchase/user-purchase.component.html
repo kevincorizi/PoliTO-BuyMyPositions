@@ -1,0 +1,169 @@
+<div class="container-fluid p-md-0">
+    <div class="row">
+        <div class="col-12 pb-3">
+            <h1>Purchase new archives</h1>
+            <h6>Select your area of interest on the map and specify a time interval to start searching.</h6>
+            <h6>You can also click on the map to draw a more precise area for your selection.</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pb-3">
+            <app-map [clickAllowed]="true" [showFlush]="true" [trackZoom]="true"></app-map>
+        </div>
+    </div>
+    <form #purchaseForm="ngForm" (submit)="onSubmit()" class="w-100 pb-3">
+        <div class="row">
+            <div class="col-md-9 col-12">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <mat-form-field class="w-100">
+                            <input
+                                    matInput
+                                    [(ngModel)]="interval"
+                                    [owlDateTimeTrigger]="dtFrom"
+                                    [owlDateTime]="dtFrom"
+                                    [max]="now"
+                                    [selectMode]="'rangeFrom'"
+                                    placeholder="From"
+                                    name="from"
+                                    required
+                                    readonly>
+                            <owl-date-time #dtFrom></owl-date-time>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <mat-form-field class="w-100">
+                            <input
+                                    matInput
+                                    [(ngModel)]="interval"
+                                    [owlDateTimeTrigger]="dtTo"
+                                    [owlDateTime]="dtTo"
+                                    [max]="now"
+                                    [selectMode]="'rangeTo'"
+                                    placeholder="To"
+                                    name="to"
+                                    required
+                                    readonly>
+                            <owl-date-time #dtTo></owl-date-time>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-12">
+                <button type="submit"
+                        class="btn btn-grey btn-block btn-rounded z-depth-1a waves-light m-0"
+                        [disabled]="!purchaseForm.valid || interval[0] == undefined || interval[1] == undefined">Search
+                </button>
+            </div>
+        </div>
+    </form>
+    <div id="search-action-container">
+        <div class="row" *ngIf="loading">
+            <div class="col-12">
+                <h4>Searching...</h4>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+        </div>
+        <div class="row pb-3" *ngIf="!loading && searchOccurred">
+            <div class="col-12">
+                <div class="pb-3">
+                    <div>
+                        <h4>Search results</h4>
+                    </div>
+                    <div>
+                        <h6 *ngIf="archiveListItems.length == 0 || userListItems.length == 0">
+                            No archive found. Try with a different area or time interval.
+                        </h6>
+                        <h6 *ngIf="archiveListItems.length > 0 && userListItems.length > 0">
+                            {{archiveListItems.length}} archives found.
+                        </h6>
+                    </div>
+                </div>
+                <div class="row" *ngIf="archiveListItems.length > 0 && userListItems.length > 0">
+                    <div class="col-12">
+                        <div class="row pb-2">
+                            <div class="col-12 col-md-8">
+                                <div class="w-100 pb-2">
+                                    <h3>Archives</h3>
+                                    <h6>Click on an archive to include or exclude it from your purchase</h6>
+                                </div>
+                                <mat-expansion-panel *ngFor="let archive of archiveListItems">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            <mat-checkbox
+                                                    [checked]="archive.selected"
+                                                    [color]="'primary'"
+                                                    (click)="archiveStatusChanged($event, archive.archive.realArchiveId)">
+                                            </mat-checkbox>
+                                            {{ archive.archive.realArchiveId }}
+                                        </mat-panel-title>
+                                        <mat-panel-description>
+                                            <span>Total positions: {{ archive.archive.realPositions }}</span>
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <mat-list>
+                                        <mat-list-item
+                                                *ngFor="let position of archive.archive.approxPositionArchive.geoPoints; let last = last;">
+                                            <span class="mr-2">Approximate latitude: <span>{{ position.geoPoint.y }},</span></span>
+                                            <span>Approximate longitude: <span>{{ position.geoPoint.x }}</span></span>
+                                            <mat-divider *ngIf="!last"></mat-divider>
+                                        </mat-list-item>
+                                    </mat-list>
+                                </mat-expansion-panel>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="w-100">
+                                    <h3>Owners</h3>
+                                    <h6>Click on a owner to include or exclude all of his archives from your
+                                        purchase</h6>
+                                </div>
+                                <mat-selection-list>
+                                    <mat-list-option
+                                            *ngFor="let user of userListItems"
+                                            [selected]="user.selected"
+                                            [color]="'primary'"
+                                            (click)="userStatusChanged(user.user, $event)">
+                                        <div class="w-100">
+                                            <div class="float-left mr-2 d-flex align-items-center">
+                                                <mat-icon [style.color]="user.color">brightness_1</mat-icon>
+                                            </div>
+                                            <div class="float-left">{{ user.user }}, {{ user.archives }} archives</div>
+                                        </div>
+                                    </mat-list-option>
+                                </mat-selection-list>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="w-100 pb-2">
+                                    <h3>Time diagram</h3>
+                                    <h6>This diagram shows the trend of archives in time for each user: each row
+                                        contains all the time measures for one user</h6>
+                                </div>
+                                <app-time-chart [archives]="archiveListItems" [users]="userListItems"></app-time-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pb-5" *ngIf="!loading && searchOccurred && archiveListItems.length > 0 && userListItems.length > 0">
+            <div class="col-12 col-md-9">
+                <div>
+                    <h4>Complete transaction</h4>
+                </div>
+                <div>
+                    <h6 *ngIf="!purchaseIsDisabled">All set! Click to buy the selected archives!</h6>
+                    <h6 *ngIf="purchaseIsDisabled">You need to select at least one archive to proceed.</h6>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <button type="button"
+                        class="btn btn-grey btn-block btn-rounded z-depth-1a waves-light m-0"
+                        (click)="purchase()"
+                        [disabled]="purchaseIsDisabled">Purchase
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

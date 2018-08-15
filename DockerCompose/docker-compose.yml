@@ -1,0 +1,36 @@
+
+# We define 3 services - The actual applications plus 2 repositories
+# Services communicate through a bridged network, the only service communicating with the host machine is spring app
+# whose port 8080 is mapped on the host machine port 8080
+networks:
+  spring-application-network:
+    driver: bridge
+services:
+  postgress-users-db:
+    container_name: usersdb
+    build:
+      context: ./postgress-users-db/.
+      dockerfile: Dockerfile.usersdb
+    image: usersdb:latest
+    expose:
+      - 5432
+    networks:
+      - spring-application-network
+    volumes:
+      - postgress-data:/var/lib/postgresql
+  mongo-positions-db:
+    container_name: positionsdb
+    build:
+      context: ./mongo-positions-db/.
+      dockerfile: Dockerfile.positionsdb
+    image: positionsdb:latest
+    expose:
+      - 27017
+    networks:
+      - spring-application-network
+    volumes:
+      - mongo-data:/data/db
+version: '2.0'
+volumes:
+  postgress-data: {}
+  mongo-data: {}

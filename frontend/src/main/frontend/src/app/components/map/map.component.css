@@ -1,0 +1,25 @@
+.map {
+    height: 400px;
+    padding: 0;
+}
+
+.flush-map {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 50%;
+    z-index: 995;
+    margin: 20px;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+}
+
+.flush-map i {
+    font-size: 25px;
+}
+
+.leaflet-control-container .leaflet-top,
+.leaflet-control-container .leaflet-bottom {
+    z-index: 997 !important;
+}

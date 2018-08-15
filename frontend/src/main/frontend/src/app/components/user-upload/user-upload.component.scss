@@ -1,0 +1,70 @@
+.my-drop-zone {
+  padding: 75px 20px;
+  text-align: center;
+  background-color: #f5f5f5;
+}
+
+.my-drop-zone .mat-icon {
+  height: 40px;
+  width: 40px;
+  font-size: 40px;
+}
+
+.nv-file-over {
+  background-color: #ededed;
+}
+
+#queue-progress {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.bmp-upload-table-head {
+  background-color: #f5f5f5;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  margin-bottom: 6px;
+}
+
+.bmp-upload-table-head span {
+  font-weight: bolder;
+}
+
+.bmp-upload-table-row {
+  border-bottom: 1px solid #ededed;
+}
+
+.bmp-upload-table .half-row .row {
+  height: 100%;
+}
+
+.bmp-upload-table .quarter-row {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding: 1rem;
+}
+
+.bmp-upload-table .status-column {
+  display: flex;
+  align-items: center;
+}
+
+.bmp-upload-table .status-column > span {
+  margin-left: 10px;
+  font-size: 1rem;
+  font-weight: bolder;
+}
+
+.bmp-upload-table .status-column.uploading .mat-icon {
+  animation: rotating 1s linear infinite;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}

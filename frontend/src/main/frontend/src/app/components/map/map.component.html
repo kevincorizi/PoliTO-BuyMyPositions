@@ -1,0 +1,7 @@
+<div class="map"
+     leaflet
+     [leafletOptions]="options"
+     [leafletLayers]="layers"
+     (leafletMapReady)="onMapReady($event)">
+    <button *ngIf="showFlush" class="flush-map btn btn-dark" (click)="flushMap($event)"><i class="fa fa-close"></i></button>
+</div>

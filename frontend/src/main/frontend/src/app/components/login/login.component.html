@@ -1,0 +1,49 @@
+<div class="view">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 py-2 d-flex align-items-center justify-content-center">
+                <div class="card col-lg-6 col-md-8 col-12">
+                    <div class="header">
+                        <div class="row d-flex justify-content-center blue-gradient p-5">
+                            <h3 *ngIf="!fromRegistration" class="white-text mb-0 font-weight-bold">Long time no
+                                see!</h3>
+                            <h3 *ngIf="fromRegistration" class="white-text mb-0 font-weight-bold">Thank you for joining
+                                us!<br/>Log in to see what's next!</h3>
+                        </div>
+                    </div>
+                    <div *ngIf="error" class="error-message-container row px-5 text-center"
+                         style="background-color: rgba(255, 0, 0, 0.5)">
+                        <p class="py-3 mb-0 text-center w-100">{{ errorMessage }}</p>
+                    </div>
+                    <div class="card-body mx-4">
+                        <form #loginForm="ngForm" (submit)="onSubmit()">
+                            <div class="md-form">
+                                <input type="text" class="form-control" id="username" name="username"
+                                       [(ngModel)]="username"
+                                       #emailNgModel="ngModel" required placeholder="Username"
+                                       (keypress)="clearError()">
+                            </div>
+                            <div class="md-form pb-1 pb-md-3">
+                                <input type="password" class="form-control" id="password" name="password"
+                                       [(ngModel)]="password"
+                                       #passwordNgModel="ngModel" required placeholder="Password"
+                                       (keypress)="clearError()">
+                            </div>
+                            <div class="text-center mb-3">
+                                <button type="submit" class="btn btn-grey btn-block btn-rounded z-depth-1a waves-light"
+                                        [disabled]="!loginForm.valid || error"
+                                        (click)="clearError()">Sign in
+                                </button>
+                            </div>
+                        </form>
+                        <div class="modal-footer pt-3 mb-1 pr-0">
+                            <p class="font-small grey-text d-flex justify-content-end">Not a member?
+                                <a class="dark-grey-text ml-1" routerLink="/signup"> Sign Up</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+# Setting LF on all files with
+*.js text eol=lf
+*.sql text eol=lf
+*.sh text eol=lf

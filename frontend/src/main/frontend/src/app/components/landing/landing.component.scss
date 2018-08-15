@@ -1,0 +1,56 @@
+.view {
+  background-image: url("assets/map_hand.jpg");
+  background-size: cover;
+  height: 100vh;
+  background-attachment: fixed;
+}
+
+@media (min-width: 768px) {
+  .view {
+    overflow: visible;
+  }
+}
+
+#reviews-row {
+  background-image: url("assets/phone_hand.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.review-star {
+  color: orange;
+  font-size: 25px;
+  margin-right: 7px;
+  margin-bottom: 10px;
+}
+
+.testimonial-card {
+  margin-top: 60px;
+}
+
+.testimonial-card .avatar {
+  max-width: 120px;
+  max-height: 120px;
+  margin-top: -60px;
+}
+
+.testimonial-card .avatar img {
+  max-width: 100%;
+}
+
+.navbar {
+  background-color: transparent;
+}
+
+.navbar-brand {
+  color: #fff !important;
+}
+
+.navbar.scrolling-navbar.top-nav-collapse {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+#loginButton {
+  display: block;
+}

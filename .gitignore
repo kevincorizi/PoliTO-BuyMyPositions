@@ -1,0 +1,32 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Maven
+log/
+target/
+
+#*.properties
+*.jar
+
+backend/target/
+frontend/target/
+frontend/src/main/frontend/node_modules/
+frontend/src/main/frontend/node/node_modules/
+frontend/src/main/frontend/dist/
+frontend/src/main/frontend/node/node.exe
+frontend/src/main/frontend/node/npm

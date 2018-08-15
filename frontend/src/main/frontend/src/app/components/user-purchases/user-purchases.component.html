@@ -1,0 +1,67 @@
+<div class="container-fluid p-md-0">
+    <div class="row">
+        <div class="col-12 pb-3">
+            <h1>Manage your transactions</h1>
+            <h6>These are all the transactions you performed from the beginning of time.</h6>
+            <h6>You can review them and download them.</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pb-3">
+            <div *ngIf="transactions != null; else loading">
+                <ng-container *ngIf="transactions.length; else noItems">
+                    <mat-expansion-panel *ngFor="let transaction of transactions">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>{{ transaction.id }}</mat-panel-title>
+                            <mat-panel-description>Cost: {{ transaction.amountPaid }}</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <ng-template matExpansionPanelContent>
+                            <div *ngIf="getArchivesForTransaction(transaction.id, transaction.archives) | async as archives; else loadingArchives">
+                                <mat-expansion-panel *ngFor="let archive of archives">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>{{ archive.id }}</mat-panel-title>
+                                        <mat-panel-description>Positions: {{ archive.positions.length }}</mat-panel-description>
+                                    </mat-expansion-panel-header>
+                                    <mat-list>
+                                        <mat-list-item *ngFor="let position of archive.positions; let last = last;">
+                                            <span class="mr-2">Latitude: <span>{{ position.geoPoint.y }}</span>,</span>
+                                            <span class="mr-2">Longitude: <span>{{ position.geoPoint.x }}</span>,</span>
+                                            <span>Timestamp: <span>{{ position.timestamp }}</span></span>
+                                            <mat-divider *ngIf="!last"></mat-divider>
+                                        </mat-list-item>
+                                    </mat-list>
+                                    <mat-action-row>
+                                        <button mat-button class="mat-button mat-primary"
+                                                (click)="downloadArchive(archive)">Download archive
+                                        </button>
+                                    </mat-action-row>
+                                </mat-expansion-panel>
+                                <mat-action-row>
+                                    <button mat-button class="mat-button mat-primary"
+                                            (click)="downloadTransaction(transaction, archives)">Download transaction
+                                    </button>
+                                </mat-action-row>
+                            </div>
+                            <ng-template #loadingArchives>
+                                <p>Loading archives...</p>
+                                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                            </ng-template>
+                        </ng-template>
+                    </mat-expansion-panel>
+                </ng-container>
+                <ng-template #noItems>
+                    <div>
+                        <h4>Oops...</h4>
+                    </div>
+                    <div>
+                        <h6>You didn't perform any transaction yet. Want to go shopping?</h6>
+                    </div>
+                </ng-template>
+            </div>
+            <ng-template #loading>
+                <h4>Loading transactions...</h4>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </ng-template>
+        </div>
+    </div>
+</div>

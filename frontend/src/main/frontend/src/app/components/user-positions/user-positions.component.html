@@ -1,0 +1,57 @@
+<div class="container-fluid p-md-0">
+    <div class="row">
+        <div class="col-12 pb-3">
+            <h1>Manage your archives</h1>
+            <h6>Keep track of your uploaded archives: see them on the map, see their details, delete them!</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pb-3">
+            <app-map [clickAllowed]="false" [showFlush]="false"></app-map>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 pb-3">
+            <div *ngIf="archives != null; else loading">
+                <ng-container *ngIf="archives.length; else noItems">
+                    <mat-expansion-panel *ngFor="let archive of archives">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>{{ archive.id }}</mat-panel-title>
+                            <mat-panel-description>Purchases: {{ archive.timesBought }}</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <ng-template matExpansionPanelContent>
+                            <mat-list>
+                                <mat-list-item *ngFor="let position of archive.positions; let last = last;">
+                                    <span class="mr-2">Latitude: <span>{{ position.geoPoint.y }}</span>,</span>
+                                    <span class="mr-2">Longitude: <span>{{ position.geoPoint.x }}</span>,</span>
+                                    <span>Timestamp: <span>{{ position.timestamp }}</span></span>
+                                    <mat-divider *ngIf="!last"></mat-divider>
+                                </mat-list-item>
+                            </mat-list>
+                        </ng-template>
+                        <mat-action-row>
+                            <button mat-button class="mat-button mat-primary" (click)="downloadOwnArchive(archive.id)">
+                                Download
+                            </button>
+                            <button mat-button class="mat-button mat-warn" (click)="deleteOwnArchive(archive.id)">
+                                Delete
+                            </button>
+                        </mat-action-row>
+                    </mat-expansion-panel>
+                </ng-container>
+                <ng-template #noItems>
+                    <div>
+                        <h4>Oops...</h4>
+                    </div>
+                    <div>
+                        <h6>It seems you haven't uploaded any archive yet. Why don't you start now?</h6>
+                    </div>
+                </ng-template>
+            </div>
+            <ng-template #loading>
+                <h4>Loading archives...</h4>
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </ng-template>
+        </div>
+    </div>
+</div>

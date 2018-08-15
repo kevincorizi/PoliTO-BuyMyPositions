@@ -1,0 +1,16 @@
+.view {
+  background-size: cover;
+  min-height: 100vh;
+  background-attachment: fixed;
+  padding-top: 64px;
+  display: flex;
+}
+
+.view > .container,
+.view > .container > .row {
+  min-height: 100%;
+}
+
+.blue-gradient {
+  background: linear-gradient(40deg, #45cafc, #303f9f) !important;
+}

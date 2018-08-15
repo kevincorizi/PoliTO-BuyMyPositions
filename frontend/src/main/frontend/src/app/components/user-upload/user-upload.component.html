@@ -1,0 +1,147 @@
+<div class="container-fluid p-md-0">
+    <div class="row">
+        <div class="col-12 pb-3">
+            <h1>Upload new archives</h1>
+            <h6>Here you can upload new archives to sell. Just drag and drop your files, we'll do the rest!</h6>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col">
+            <h3>Select files</h3>
+            <mat-card ng2FileDrop
+                      [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                      (fileOver)="fileOverBase($event)"
+                      [uploader]="uploader"
+                      class="well my-drop-zone">
+                <mat-card-content>
+                    <mat-icon>cloud_upload</mat-icon>
+                    <p style="font-size: 1.5rem;">Drop your files here</p>
+                </mat-card-content>
+                <button type="button" mat-button (click)="clickFileUpload.click()">or click here</button>
+                <input hidden multiple type="file" ng2FileSelect [uploader]="uploader" #clickFileUpload/>
+            </mat-card>
+        </div>
+    </div>
+    <div class="row pb-3">
+        <div class="col mb-5" *ngIf="uploader.queue.length">
+            <div class="bmp-upload-table col-12">
+                <div class="bmp-upload-table-head row">
+                    <div class="half-row col-12 col-md-6">
+                        <div class="row">
+                            <div class="quarter-row col-6">
+                                <span>Name</span>
+                            </div>
+                            <div class="quarter-row col-6">
+                                <span>Size</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="half-row col-12 col-md-6">
+                        <div class="row">
+                            <div class="quarter-row col-6">
+                                <span>Status</span>
+                            </div>
+                            <div class="quarter-row col-6">
+                                <span>Actions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bmp-upload-table-body row">
+                    <div class="col-12">
+                        <div class="bmp-upload-table-row row" *ngFor="let item of uploader.queue">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="half-row col-12 col-md-6">
+                                        <div class="row">
+                                            <div class="quarter-row col-6">
+                                                <span style="word-break: break-all;"><strong>{{ item.file.name }}</strong></span>
+                                            </div>
+                                            <div class="quarter-row col-6">
+                                                <span *ngIf="item.file.size >= 1024 * 1024">{{ item.file.size/1024/1024 | number:'1.2-2' }} MB</span>
+                                                <span *ngIf="item.file.size >= 1024 && item.file.size < 1024 * 1024">{{ item.file.size/1024 | number:'1.2-2' }} KB</span>
+                                                <span *ngIf="item.file.size < 1024">{{ item.file.size | number:'1.2-2' }} B</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="half-row col-12 col-md-6">
+                                        <div class="row">
+                                            <div class="quarter-row col-6">
+                                                <div class="status-column" *ngIf="item.isSuccess">
+                                                    <mat-icon>done</mat-icon>
+                                                    <span>Uploaded</span>
+                                                </div>
+                                                <div class="status-column" *ngIf="item.isError && !item.isCancel">
+                                                    <mat-icon>error_outline</mat-icon>
+                                                    <span>Error</span>
+                                                </div>
+                                                <div class="status-column uploading" *ngIf="item.isUploading">
+                                                    <mat-icon>cached</mat-icon>
+                                                    <span>Uploading</span>
+                                                </div>
+                                                <div class="status-column" *ngIf="item.isError && item.isCancel">
+                                                    <mat-icon>report_problem_outline</mat-icon>
+                                                    <span>Invalid content</span>
+                                                </div>
+                                                <div class="status-column"
+                                                     *ngIf="!item.isSuccess && !item.isError && !item.isUploading && !item.isCancel">
+                                                    <mat-icon>schedule</mat-icon>
+                                                    <span>Ready</span>
+                                                </div>
+                                            </div>
+                                            <div class="quarter-row col-6">
+                                                <button mat-button type="button"
+                                                        (click)="item.remove()">
+                                                    <mat-icon>delete_outline</mat-icon>
+                                                    Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <mat-progress-bar *ngIf="item.isUploading"
+                                                          style="margin-bottom: 1rem"
+                                                          [color]="'primary'"
+                                                          [mode]="'determinate'"
+                                                          [value]="item.progress">
+                                        </mat-progress-bar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="queue-progress" *ngIf="false && uploader.isUploading">
+                    <mat-progress-bar
+                            [color]="'primary'"
+                            [mode]="'determinate'"
+                            [value]="uploader.progress">
+                    </mat-progress-bar>
+                </div>
+                <div id="queue-action-buttons">
+                    <button mat-raised-button type="button" color="primary"
+                            style="margin-top: 1rem; margin-right: 1rem;"
+                            (click)="uploader.uploadAll()"
+                            [disabled]="!uploader.getNotUploadedItems().length || !canUpload()">
+                        <mat-icon>cloud_upload</mat-icon>
+                        Upload all
+                    </button>
+                    <button mat-raised-button type="button" color="warn"
+                            style="margin-top: 1rem;"
+                            (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                        <mat-icon>error_outline</mat-icon>
+                        Remove all
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col mb-5" *ngIf="!uploader.queue.length">
+
+        </div>
+    </div>
+</div>
